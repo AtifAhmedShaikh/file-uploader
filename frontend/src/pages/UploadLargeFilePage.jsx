@@ -1,7 +1,11 @@
 import { useState, useRef } from "react";
 import { Progress } from "../components/ui/progress";
+import { Button } from "../components/ui/button";
 
-const UploadLargeFileToServer = ({ speedLimit = 100 }) => {
+const CHUNK_SIZE = 2 * 1024 * 1024; // 5MB per chunk
+const speedLimit = 100;
+
+const UploadLargeFileToServer = () => {
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [paused, setPaused] = useState(false);
@@ -11,26 +15,35 @@ const UploadLargeFileToServer = ({ speedLimit = 100 }) => {
   const uploadedChunksRef = useRef(0);
   const pauseRef = useRef(false);
 
-  const uploadFile = async (file) => {
-    const chunkSize = 5 * 1024 * 1024; // 5MB per chunk
-    const totalChunks = Math.ceil(file.size / chunkSize);
+  // Handle file selection
+  const handleFileSelect = (e) => {
+    if (e.target.files.length) {
+      fileRef.current = e.target.files[0];
+      uploadedChunksRef.current = 0;
+      setProgress(0);
+      setMessage("");
+    }
+  };
 
-    // Convert speedLimit (KB/s) to bytes per second
-    const maxUploadSpeed = speedLimit * 1024; // KB -> Bytes
-    const delayPerChunk = Math.ceil((chunkSize / maxUploadSpeed) * 1000); // Delay in ms
+  const uploadFile = async () => {
+    if (!fileRef.current) return;
+
+    const file = fileRef.current;
+    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+    const maxUploadSpeed = speedLimit * 1024;
+    const delayPerChunk = Math.ceil((CHUNK_SIZE / maxUploadSpeed) * 1000);
 
     setUploading(true);
     setMessage("");
 
     for (let i = uploadedChunksRef.current; i < totalChunks; i++) {
-      // Pause handling
       if (pauseRef.current) {
         setPaused(true);
         return;
       }
 
-      const start = i * chunkSize;
-      const end = Math.min(start + chunkSize, file.size);
+      const start = i * CHUNK_SIZE;
+      const end = Math.min(start + CHUNK_SIZE, file.size);
       const chunk = file.slice(start, end);
 
       const formData = new FormData();
@@ -47,8 +60,6 @@ const UploadLargeFileToServer = ({ speedLimit = 100 }) => {
 
         uploadedChunksRef.current = i + 1;
         setProgress(Math.round((uploadedChunksRef.current / totalChunks) * 100));
-
-        // Simulate network throttling
         await new Promise((resolve) => setTimeout(resolve, delayPerChunk));
       } catch (error) {
         console.error("Upload failed", error);
@@ -69,30 +80,29 @@ const UploadLargeFileToServer = ({ speedLimit = 100 }) => {
   };
 
   const handleResume = () => {
-    if (!fileRef.current) return;
     pauseRef.current = false;
     setPaused(false);
-    uploadFile(fileRef.current);
+    uploadFile();
   };
 
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="p-4 max-w-md mx-auto bg-green-50 border border-green-700 shadow-md rounded-xl">
         <h2 className="text-lg font-semibold mb-3">Chunked File Upload</h2>
-        <p className="text-sm font-semibold mb-3">Upload Large File to the server using chunck by chunck </p>
+        <p className="text-sm font-semibold mb-3">Upload large files chunk by chunk</p>
         <input
           type="file"
-          onChange={(e) => {
-            if (e.target.files.length) {
-              fileRef.current = e.target.files[0];
-              uploadedChunksRef.current = 0; // Reset upload progress
-              uploadFile(fileRef.current);
-            }
-          }}
+          onChange={handleFileSelect}
           disabled={uploading}
           className="mb-2 border p-2 rounded w-full"
         />
-        Progress: {progress}%
+        <Button
+          onClick={uploadFile}
+          disabled={uploading || !fileRef.current}
+        >
+          Start Upload
+        </Button>
+        <p className="text-lg font-bold">Progress: {progress}%</p>
         {uploading && (
           <div className="w-full bg-gray-200 rounded-full h-3 mt-3">
             <Progress value={progress} />
