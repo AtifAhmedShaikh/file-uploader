@@ -4,6 +4,9 @@ import { mergeChunks } from "./helper.js";
 
 export const uploadLargeFileController = (req, res) => {
   const { chunkIndex, totalChunks, fileName } = req.body;
+  if (!fileName || !totalChunks || chunkIndex < 0) {
+    return res.status(400).json({ error: "Missing required parameters" });
+  }
   const uploadDir = req.uploadDirectory;
   const chunkPath = path.join(uploadDir, `${fileName}.part${chunkIndex}`);
 

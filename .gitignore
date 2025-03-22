@@ -34,3 +34,8 @@ uploads/*
 /backend/uploads/*
 backend/uploads/*
 backend/uploads
+
+pnpm-lock.ymal
+*pnpm-lock.ymal
+*.yaml
+.yaml

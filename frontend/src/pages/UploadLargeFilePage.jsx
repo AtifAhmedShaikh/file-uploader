@@ -17,6 +17,7 @@ const UploadLargeFileToServer = () => {
 
   // Handle file selection
   const handleFileSelect = (e) => {
+    alert(e.target.files.length);
     if (e.target.files.length) {
       fileRef.current = e.target.files[0];
       uploadedChunksRef.current = 0;
@@ -86,7 +87,7 @@ const UploadLargeFileToServer = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen bg-primary-foreground">
       <div className="p-4 max-w-md mx-auto bg-green-50 border border-green-700 shadow-md rounded-xl">
         <h2 className="text-lg font-semibold mb-3">Chunked File Upload</h2>
         <p className="text-sm font-semibold mb-3">Upload large files chunk by chunk</p>
@@ -96,10 +97,8 @@ const UploadLargeFileToServer = () => {
           disabled={uploading}
           className="mb-2 border p-2 rounded w-full"
         />
-        <Button
-          onClick={uploadFile}
-          disabled={uploading || !fileRef.current}
-        >
+        {JSON.stringify([uploading])}
+        <Button className={"disabled:!bg-gray-400 disabled:text-gray-700"} onClick={uploadFile} disabled={uploading}>
           Start Upload
         </Button>
         <p className="text-lg font-bold">Progress: {progress}%</p>
