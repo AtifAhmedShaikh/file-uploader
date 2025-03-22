@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button";
 
 const CHUNK_SIZE = 2 * 1024 * 1024; // 5MB per chunk
 const speedLimit = 100;
+const backendURL = import.meta.env?.VITE_BACKEND_URL || "http://localhost:5000";
 
 const UploadLargeFileToServer = () => {
   const [progress, setProgress] = useState(0);
@@ -54,7 +55,7 @@ const UploadLargeFileToServer = () => {
       formData.append("fileName", file.name);
 
       try {
-        await fetch("http://localhost:5000/api/download/upload-large-file", {
+        await fetch(`${backendURL}/api/download/upload-large-file`, {
           method: "POST",
           body: formData
         });
