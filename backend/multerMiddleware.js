@@ -15,7 +15,7 @@ const fileDestinationHandler = (req, file, cb) => {
 // Configure Multer to store files temporarily
 const storage = multer.diskStorage({
   destination: fileDestinationHandler,
-  filename: (req, file, cb) => cb(null, file.originalname)
+  filename: (req, file, cb) => cb(null, file.originalname),
 });
 
 export const multerMiddleware = multer({ storage });
