@@ -1,6 +1,14 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import mime from "mime-types";
+import dotenv from "dotenv";
+
+dotenv.config({
+  path: "./config/config.env"
+});
+dotenv.configDotenv({
+  path: "./config/config.env"
+});
 
 const region = process.env.AWS_REGION;
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
