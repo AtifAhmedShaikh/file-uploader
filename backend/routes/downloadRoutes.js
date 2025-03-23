@@ -1,11 +1,11 @@
 import express from "express";
+
+import { uploadMiddleware } from "../multerMiddleware.js";
 import {
   downloadLargeFileController,
   getFileInfo,
   uploadLargeFileController,
-} from "./downloadControler.js";
-import { uploadMiddleware } from "./multerMiddleware.js";
-
+} from "../downloadControler.js";
 const router = express.Router();
 
 router.post(
