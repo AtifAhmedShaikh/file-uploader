@@ -39,3 +39,4 @@ pnpm-lock.ymal
 *pnpm-lock.ymal
 *.yaml
 .yaml
+*lock.*
