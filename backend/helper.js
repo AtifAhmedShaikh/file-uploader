@@ -37,3 +37,27 @@ export const mergeChunks = (fileName, totalChunks, uploadDir) => {
   writeStream.on("finish", () => handleUploadAllChunksToS3(finalPath, fileName));
   console.log(`File merged: ${fileName}`);
 };
+
+// split file into 
+export const splitFileIntoValidChunks = file => {
+  const MIN_CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
+  const chunks = [];
+  let offset = 0;
+
+  if (file.size < MIN_CHUNK_SIZE) {
+    // If file is less than 5MB, upload as a single chunk
+    return [file];
+  }
+
+  // Calculate optimal chunk size
+  const numChunks = Math.ceil(file.size / MIN_CHUNK_SIZE);
+  const chunkSize = Math.ceil(file.size / numChunks); // Adjust chunk size dynamically
+
+  while (offset < file.size) {
+    const nextChunk = file.slice(offset, offset + chunkSize);
+    chunks.push(nextChunk);
+    offset += chunkSize;
+  }
+
+  return chunks;
+};
