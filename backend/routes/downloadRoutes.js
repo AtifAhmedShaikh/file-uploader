@@ -1,6 +1,6 @@
 import express from "express";
-import { uploadLargeFileController } from "./downloadControler.js";
-import { uploadMiddleware } from "./multerMiddleware.js";
+import { uploadLargeFileController } from "../downloadControler.js";
+import { uploadMiddleware } from "../multerMiddleware.js";
 
 const router = express.Router();
 
