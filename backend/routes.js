@@ -4,14 +4,12 @@ import {
   getFileInfo,
   uploadLargeFileController,
 } from "./downloadControler.js";
-import { multerMiddleware } from "./multerMiddleware.js";
+import { uploadMiddleware } from "./multerMiddleware.js";
 
 const router = express.Router();
 
 router.post(
-  "/upload-large-file",
-  multerMiddleware.single("chunk"),
-  uploadLargeFileController
+  "/upload-large-file", uploadMiddleware.single("chunk"), uploadLargeFileController
 );
 
 router.get("/file-info", getFileInfo);
