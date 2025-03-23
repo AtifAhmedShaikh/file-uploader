@@ -4,7 +4,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: backendURL,
-  timeout: 10000,
+  timeout: 100000,
   headers: {
     "Content-Type": "application/json",
   }
@@ -24,7 +24,7 @@ axiosInstance.interceptors.request.use(function (config) {
 
 export const uploadChunk = async (chunk, chunkIndex, totalChunks, fileName, onProgress) => {
   const formData = new FormData();
-  formData.append("chunk", chunk);
+  formData.append("chunk", chunk,fileName);
   formData.append("chunkIndex", chunkIndex);
   formData.append("totalChunks", totalChunks);
   formData.append("fileName", fileName);
