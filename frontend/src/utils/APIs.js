@@ -2,7 +2,7 @@ import { backendURL } from "../constants";
 import axios from "axios";
 
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: backendURL,
   timeout: 10000,
   headers: {

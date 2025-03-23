@@ -34,8 +34,14 @@ function App() {
           }
         />
         <Route path="*" element={<>Not Found</>} />
-        <Route path="/download-large-file" element={<DownloadLargeFile />} />
-
+        <Route
+          path="/download-large-file"
+          element={
+            <ProtectedRoute>
+              <DownloadLargeFile />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );
