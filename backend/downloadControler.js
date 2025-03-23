@@ -6,6 +6,12 @@ const FILE_PATH = "uploads";
 
 export const uploadLargeFileController = (req, res) => {
   const { chunkIndex, totalChunks, fileName } = req.body;
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+  if (!fileName || !totalChunks || chunkIndex < 0) {
+    return res.status(400).json({ error: "Missing required parameters" });
+  }
   const uploadDir = req.uploadDirectory;
   const chunkPath = path.join(uploadDir, `${fileName}.part${chunkIndex}`);
 

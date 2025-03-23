@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button";
 
 const CHUNK_SIZE = 2 * 1024 * 1024; // 5MB per chunk
 const speedLimit = 100;
+const backendURL = import.meta.env?.VITE_BACKEND_URL || "http://localhost:5000";
 
 const UploadLargeFileToServer = () => {
   const [progress, setProgress] = useState(0);
@@ -17,6 +18,7 @@ const UploadLargeFileToServer = () => {
 
   // Handle file selection
   const handleFileSelect = (e) => {
+    alert(e.target.files.length);
     if (e.target.files.length) {
       fileRef.current = e.target.files[0];
       uploadedChunksRef.current = 0;
@@ -53,7 +55,7 @@ const UploadLargeFileToServer = () => {
       formData.append("fileName", file.name);
 
       try {
-        await fetch("http://localhost:5000/api/download/upload-large-file", {
+        await fetch(`${backendURL}/api/download/upload-large-file`, {
           method: "POST",
           body: formData
         });
@@ -86,7 +88,7 @@ const UploadLargeFileToServer = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen bg-primary-foreground">
       <div className="p-4 max-w-md mx-auto bg-green-50 border border-green-700 shadow-md rounded-xl">
         <h2 className="text-lg font-semibold mb-3">Chunked File Upload</h2>
         <p className="text-sm font-semibold mb-3">Upload large files chunk by chunk</p>
@@ -96,10 +98,8 @@ const UploadLargeFileToServer = () => {
           disabled={uploading}
           className="mb-2 border p-2 rounded w-full"
         />
-        <Button
-          onClick={uploadFile}
-          disabled={uploading || !fileRef.current}
-        >
+        {JSON.stringify([uploading])}
+        <Button className={"disabled:!bg-gray-400 disabled:text-gray-700"} onClick={uploadFile} disabled={uploading}>
           Start Upload
         </Button>
         <p className="text-lg font-bold">Progress: {progress}%</p>

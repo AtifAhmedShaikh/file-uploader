@@ -5,6 +5,7 @@ import downloadRouter from "./routes.js";
 const app = express();
 
 app.use(express.json());
+<<<<<<< HEAD
 app.use(
   cors({
     origin: "*", // Allow all origins
@@ -13,6 +14,12 @@ app.use(
     exposedHeaders: ["Content-Range", "Accept-Ranges", "Content-Length"], // Allow browser to access these headers
   })
 );
+=======
+app.use(cors({
+  origin:"*"
+}));
+
+>>>>>>> 0229316fcd338dd7f38145630078c69f3cbef296
 app.get("/", (req, res) => {
   res.send("Server is ready");
 });

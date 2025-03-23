@@ -2,20 +2,26 @@ import multer from "multer";
 import fs from "node:fs";
 import path from "node:path";
 
-const fileDestinationHandler = (req, file, cb) => {
-  // access upload folder path
-  const uploadDir = path.join("uploads");
-  // If uload folder directory not exits then create the folder
-  if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
-  // attach upload folder directory to request
-  req.uploadDirectory = uploadDir;
-  cb(null, uploadDir);
+// Create the directory If does not exists
+const ensureUploadDirectoryExists = directory => {
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
+  }
 };
 
-// Configure Multer to store files temporarily
-const storage = multer.diskStorage({
-  destination: fileDestinationHandler,
-  filename: (req, file, cb) => cb(null, file.originalname),
+const setUploadDestination = (req, file, callback) => {
+  const uploadPath = path.resolve("uploads");
+
+  ensureUploadDirectoryExists(uploadPath);
+
+  req.uploadDirectory = uploadPath;
+  callback(null, uploadPath);
+};
+
+const storageConfig = multer.diskStorage({
+  destination: setUploadDestination,
+  filename: (req, file, callback) => callback(null, file.originalname)
 });
 
-export const multerMiddleware = multer({ storage });
+// middleware for handling file uploads using Multer.
+export const uploadMiddleware = multer({ storage: storageConfig });
