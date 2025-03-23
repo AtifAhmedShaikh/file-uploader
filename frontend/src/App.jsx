@@ -1,16 +1,38 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import UploadLargeFileToServer from "./pages/UploadLargeFilePage";
 import FileUploadPage from "./pages/FileUploadPage";
+
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem("authToken"); // Check if user is authenticated
+
+  return token ? children : <Navigate to="/" replace />;
+};
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/upload-large-file" element={<UploadLargeFileToServer />} />
-        <Route path="/file-upload" element={<FileUploadPage />} />
+        {/* Protected Routes */}
+        <Route
+          path="/upload-large-file"
+          element={
+            <ProtectedRoute>
+              <UploadLargeFileToServer />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/file-upload"
+          element={
+            <ProtectedRoute>
+              <FileUploadPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<>Not Found</>} />
       </Routes>
     </>
   );
