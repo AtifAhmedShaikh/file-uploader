@@ -146,7 +146,7 @@ const Download = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-900 text-white">
       <div className="bg-gray-800 p-6 rounded-2xl shadow-lg w-md text-center">
-        <h2 className="text-xl font-semibold mb-4">File Downloader</h2>
+        <h2 className="text-xl font-semibold mb-4">Localize File Downloader</h2>
 
         {/* Step 1: Enter File Name */}
         {step === 1 && (

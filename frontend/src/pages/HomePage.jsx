@@ -17,6 +17,12 @@ const HomePage = () => {
       >
         Upload Large File
       </button>
+      <button
+        onClick={() => navigate("/download-large-file")}
+        className="cursor-pointer mx-5   bg-blue-500 text-white px-4 py-2 rounded"
+      >
+        Donwload Large File
+      </button>
     </div>
   );
 };
