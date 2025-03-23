@@ -6,6 +6,7 @@ import { authMiddleware } from "./middlewares/index.js";
 import dotenv from "dotenv";
 import { connectDB } from "./database/index.js";
 import cookiesParser from "cookie-parser";
+import morgan from "morgan";
 
 dotenv.config({
   path: "./config/config.env"
@@ -18,13 +19,12 @@ const app = express();
 
 app.use(express.json());
 app.use(cookiesParser());
+app.use(morgan("dev"))
 
 app.use(
   cors({
     origin: "*", // Allow all origins
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type", "Range"], // Allow custom headers like "Range"
-    exposedHeaders: ["Content-Range", "Accept-Ranges", "Content-Length"], // Allow browser to access these headers
+   
   })
 );
 app.get("/", (req, res) => {
