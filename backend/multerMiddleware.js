@@ -23,5 +23,10 @@ const storageConfig = multer.diskStorage({
   filename: (req, file, callback) => callback(null, file.originalname)
 });
 
-// middleware for handling file uploads using Multer.
+// middleware for handling file uploads using Multer. by disk storage
 export const uploadMiddleware = multer({ storage: storageConfig });
+
+const momoryStorageMulter = multer.memoryStorage();
+
+// middleware for handling file uploads using Multer. by memory  storage
+export const memoryUploadMiddlewaree = multer({ storage: momoryStorageMulter });

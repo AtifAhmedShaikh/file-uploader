@@ -12,12 +12,14 @@ const s3 = new S3Client({
   },
 });
 
-const BUCKET_NAME = "your-bucket-name";
-const FILE_PATH = "./large-file.zip"; // Change this to your file path
-const KEY = "uploads/large-file.zip"; // S3 object key
+// const BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME;
+const BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME;
+const FILE_PATH = "./uploads/20MB.zip.part6"; // Change this to your file path
+const KEY = "stating/file-tester/20MB.zip.part6"; // S3 object key
 const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks (minimum size for multipart upload)
 
-async function uploadFileToS3() {
+export async function uploadFileToS3(file) {
+  console.log(BUCKET_NAME)
   try {
     // Step 1: Initiate multipart upload
     const createMultipartUploadResponse = await s3.send(
@@ -30,7 +32,7 @@ async function uploadFileToS3() {
     console.log(`Upload ID: ${uploadId}`);
 
     // Step 2: Read file and upload in chunks
-    const fileStream = createReadStream(FILE_PATH, { highWaterMark: CHUNK_SIZE });
+    const fileStream = createReadStream(file, { highWaterMark: CHUNK_SIZE });
     let partNumber = 1;
     const parts = [];
 

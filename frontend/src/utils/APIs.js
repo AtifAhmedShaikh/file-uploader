@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const axiosInstance = axios.create({
   baseURL: backendURL,
-  timeout: 10000,
+  timeout: 100000,
   headers: {
     "Content-Type": "application/json",
   }
@@ -24,12 +24,13 @@ axiosInstance.interceptors.request.use(function (config) {
 
 export const uploadChunk = async (chunk, chunkIndex, totalChunks, fileName, onProgress) => {
   const formData = new FormData();
-  formData.append("chunk", chunk);
-  formData.append("chunkIndex", chunkIndex);
+  formData.append("chunk", chunk,fileName);
+  formData.append("chunkIndex", Number(chunkIndex));
   formData.append("totalChunks", totalChunks);
   formData.append("fileName", fileName);
 
-  return axiosInstance.post(`/api/download/upload-large-file`, formData, {
+  // return axiosInstance.post(`/api/download/upload-large-file`, formData, {
+  return axiosInstance.post(`/api/download/upload-large-file-S3-chunks`, formData, {
     onUploadProgress: progressEvent => {
       if (onProgress) {
         const chunkProgress = Math.round(progressEvent.loaded / chunk.size * 100);

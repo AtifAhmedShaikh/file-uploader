@@ -44,6 +44,6 @@ connectDB()
     });
   })
   .catch(error => {
-    console.log("Database connection failed! at server", error);
+    console.log("Database connectipnon failed! at server", error);
     process.exit(1); // Exit the process with an error code
   });
