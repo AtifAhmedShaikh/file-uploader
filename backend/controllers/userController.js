@@ -5,16 +5,21 @@ export const userLoginController = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log("Email: ", email);
+    console.log("Password: ", password);
+
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
+    console.log("User: ", user);
     const isMatchedPassword = await user.comparePassword(password);
     if (!isMatchedPassword) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
     const token = Jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: "2d" });
+    console.log(token)
     res.cookie("token", token, { httpOnly: true });
     res.status(200).json({ user, token });
   } catch (error) {

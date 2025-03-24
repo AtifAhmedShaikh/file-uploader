@@ -2,11 +2,20 @@ import express from "express";
 import {
   uploadLargeFileController,
   uploadLargeFileToS3Bucket,
-  uploadLargeFileToS3WithChunking
+  uploadLargeFileToS3WithChunking,
+  downloadLargeFileController,
+  getFileInfo
 } from "../downloadControler.js";
 import { memoryUploadMiddlewaree, uploadMiddleware } from "../multerMiddleware.js";
-
 const router = express.Router();
+
+router.post(
+  "/upload-large-file", uploadMiddleware.single("chunk"), uploadLargeFileController
+);
+
+router.get("/file-info", getFileInfo);
+
+router.get("/download-large-file", downloadLargeFileController);
 
 // upload large file to server from client side and jsut stored in server
 router.post("/upload-large-file", uploadMiddleware.single("chunk"), uploadLargeFileController);
