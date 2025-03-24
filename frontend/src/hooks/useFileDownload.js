@@ -92,6 +92,7 @@ console.log("Expected API URL:", `http://localhost:5000/api/download/download-la
       document.body.removeChild(a);
       setDownloading(false);
     } catch (error) {
+      console.log(error)
       setErrorMessage("Error merging file.");
     }
   };

@@ -33,7 +33,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="*" element={<>Not Found</>} />
         <Route
           path="/download-large-file"
           element={
@@ -42,6 +41,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+          <Route path="*" element={<>Not Found</>} />
       </Routes>
     </>
   );
